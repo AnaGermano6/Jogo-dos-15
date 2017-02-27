@@ -10,26 +10,31 @@ import java.util.*;
 
 class Node{
     int matriz[][];
-    int altura;
+    long depth; //nivel/altura da arvore
     
     public Node(int[][] matriz,int altura){
     	this.matriz = matriz;
-    	this.altura = altura;
+    	this.depth = altura;
     }
     
-   /* public static int depth(int altura){
-    	return altura+1;
-    }*/
+    public long getDepth() {
+		return depth;
+	}
+
+	public void setDepth(long depth) {
+		this.depth = depth;
+	}
 }
 
 public class Jogodos15 {
 
-    public static int posi = 0;
+    public static int posi = 0; 
     public static int posj = 0;
     public static int zeroi, zeroj;
+    public static int n; //tamanho do tabuleiro
 
     //descobrir a posição do zero/espaço vazio
-    public static void findzero(int[][] matriz, int n){
+    public static void findzero(int[][] matriz){
     	
     	for(int i=0; i<n; i++){
     		for(int j =0; j<n; j++){
@@ -42,7 +47,7 @@ public class Jogodos15 {
     }
     
     //converte a matriz num vector
-    public static int[] createarray(int matriz[][], int n){
+    public static int[] createarray(int matriz[][]){
     	int k = 0;
     	int[] array = new int[n*n];
     
@@ -57,15 +62,15 @@ public class Jogodos15 {
 
     //verifica a solvabilidade impar 
     //verifica se existe solução entre a matriz incial e a matriz final
-    static boolean solvabilidadeimpar(int[][] in, int fim[][], int n){
+    static boolean solvabilidadeimpar(int[][] matrizIn, int matrizFim[][]){
     	int tam=n*n; //tamanho do vector
     	int vin[] = new int[tam]; //vector da matriz inicial
     	int vfim[]=new int[tam]; //vector da matriz final
     	int countin=0, countfim=0;
 
     	//cria os vectores
-    	vin=createarray(in, n);
-    	vfim=createarray(fim, n);
+    	vin=createarray(matrizIn);
+    	vfim=createarray(matrizFim);
     	
     	//conta o numero de inversões em cada vector
     	for(int i=0; i<tam; i++){
@@ -111,18 +116,18 @@ public class Jogodos15 {
     
     //verifica a solvabilidade par
     //verifica se existe solução entre a matriz incial e a matriz final
-    public static boolean  solvabilidadepar(int in[][], int fim[][], int n){
+    public static boolean  solvabilidadepar(int matrizIn[][], int matrizFim[][]){
     	int tam=n*n; //tamanho do vector
     	int vin[] = new int[tam]; //vector da matriz inicial
     	int vfim[]=new int[tam]; //vector da matriz final
 
-    	vin=createarray(in, n);
-    	vfim=createarray(fim, n);
+    	vin=createarray(matrizIn);
+    	vfim=createarray(matrizFim);
 
-    	findzero(in, n);
+    	findzero(matrizIn);
     	int localin = n-posi;
 
-    	findzero(fim, n);
+    	findzero(matrizFim);
     	int localfim = n-posi;
 	
     	if(verifica(vin, localin, tam) && verifica(vfim, localfim, tam))
@@ -137,7 +142,7 @@ public class Jogodos15 {
     
     //copia a matriz incial para a matriz dos descendentes
     //Para poder alterar a matriz sem mexer na matriz inicial
-    public static int[][] copyMatriz(int matriz[][], int n){
+    public static int[][] copyMatriz(int matriz[][]){
 		int descen[][]= new int[n][n]; //matriz descendentes 
 		 
 		for(int i=0; i<n; i++){
@@ -149,32 +154,32 @@ public class Jogodos15 {
 	}
 
     //cria os descendentes
-	public static LinkedList<Node> makedescendants(int matriz[][], int n){
+	public static LinkedList<Node> makedescendants(int matriz[][]){
 	
 		LinkedList<Node> listFilhos = new LinkedList<Node>();  
-		findzero(matriz, n);
+		findzero(matriz);
 		zeroi = posi; //linha onde está o zero 
 		zeroj = posj; //coluna onde está o zero
 	
 		//a posição anterior onde está o zero nao pode sair fora da matriz
 		if(!(zeroi-1<0)){
-			listFilhos.add(trocaPos(matriz, n, zeroi-1, zeroj));
+			listFilhos.add(trocaPos(matriz, zeroi-1, zeroj));
 		}
 		
 		//a posição a seguir tem de ser menor que o tamanho da matriz para poder haver troca
 		if(!(zeroi+1>=n)){
-			listFilhos.add(trocaPos(matriz, n, zeroi+1, zeroj));
+			listFilhos.add(trocaPos(matriz, zeroi+1, zeroj));
 		}
 		
 	
 		//a posição anterior onde está o zero nao pode sair fora da matriz 	
 		if(!(zeroj-1>0)){
-			listFilhos.add(trocaPos(matriz, n, zeroi, zeroj-1));
+			listFilhos.add(trocaPos(matriz, zeroi, zeroj-1));
 		}
 	
 		//a posição a seguir tem de ser menor que o tamanho da matriz para poder haver troca
 		if(!(zeroj+1>=n)){
-			listFilhos.add(trocaPos(matriz, n, zeroi, zeroj+1));
+			listFilhos.add(trocaPos(matriz, zeroi, zeroj+1));
 		}
 		
 		return listFilhos;
@@ -182,8 +187,8 @@ public class Jogodos15 {
 	
 	//troca as posições e retorna a nova matriz
 	//***********FALTA A ALTURA********
-	public static Node trocaPos(int matriz[][], int n, int i, int j){
-		int copyM[][] = copyMatriz(matriz, n);
+	public static Node trocaPos(int matriz[][], int i, int j){
+		int copyM[][] = copyMatriz(matriz);
 		
 		//trocar valores na Matriz copia
 		copyM[zeroi][zeroj] = copyM[i][j];
@@ -195,32 +200,42 @@ public class Jogodos15 {
 	}
 	
 	//calcula a distancia entre a posicao inicial e a posicao final 
-	public static int calManattanDistance(int matrizIn[][], int matrizFim[][], int n){
+	public static int calcManattanDistance(int matrizIn[][], int matrizFim[][]){
 	
 		int distance = 0;
+		//coordenadas da posição do valor
+		int coord[]=new int[2]; 
 		
 		for(int i=0; i<n; i++){
 			for(int j=0; j<n; j++){
 				
-				findzero(matrizIn, n);
-				//guarda as coordenadas da matriz inicial
-				int x0=posi; 
-				int y0=posj;
+				//verifica em que posição se encontra o valor na matriz final
+				coord=findNum(matrizIn[i][j], matrizFim);
 				
-				findzero(matrizFim, n);
-				//guarda as coordenadas da matriz final
-				int x1=posi;
-				int y1=posj;
+				int x1=coord[0];
+				int y1=coord[1];
 				
-				distance+= Math.abs(x0-x1)+Math.abs(y0-y1);
+				distance+= Math.abs(i-x1)+Math.abs(j-y1);
 			}
 		}
 		return distance;
 	}
 	
-	public static int findNum(int matriz, int i, int j){
+	public static int[] findNum(int valor, int matriz[][]){
+		//vector das coordenadas no valor, com duas posições  
+		// 0 coordenada do i
+		// 1 coordenada do j
+		int coordinates[] = new int[2];
 		
-		return num;
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				if (matriz[i][j] == valor) {
+					coordinates[0] = i;
+					coordinates[1] = j;
+				}
+			}
+		}
+		return coordinates;
 	}
 	
 	/*//Algoritmo Geral de Busca
@@ -242,23 +257,23 @@ public class Jogodos15 {
     	
     	System.out.println("Insira o tamanho do tabuleiro");
     	//tamanho do tabuleiro
-    	int n = stdin.nextInt();
+    	n = stdin.nextInt();
     	
     	//matriz inicial
-    	int in [][]= new int[n][n];	
+    	int matrizIn [][]= new int[n][n];	
     	//matriz final
-    	int fim [][]= new int[n][n];
+    	int matrizFim [][]= new int[n][n];
 	
     	System.out.println("Insira o tabuleiro com as posições iniciais");
     	//lê a matriz inicial	
     	for(int i=0; i<n; i++){
     		for(int j=0; j<n; j++){
-    			in[i][j] = stdin.nextInt();	
+    			matrizIn[i][j] = stdin.nextInt();	
     		}
     	}
 	
     	//adiciona a matriz na primeira posição da arvore
-    	Node posInicial = new Node(in, 0); 
+    	Node posInicial = new Node(matrizIn, 0); 
     	list.add(posInicial);
     	//makedescendants(in, n);
 
@@ -266,12 +281,12 @@ public class Jogodos15 {
     	//lê a matriz final
     	for(int i=0; i<n; i++){
     		for(int j=0; j<n; j++){
-    			fim[i][j] = stdin.nextInt();
+    			matrizFim[i][j] = stdin.nextInt();
     		}
     	}
 
     	if((n%2) == 0){
-    		if(solvabilidadepar(in, fim, n)){
+    		if(solvabilidadepar(matrizIn, matrizFim)){
     			System.out.println("Vamos em frente!! :D");
     		}
     		else{
@@ -281,7 +296,7 @@ public class Jogodos15 {
     	}
 
     	else{
-    		if(solvabilidadeimpar(in, fim, n)){
+    		if(solvabilidadeimpar(matrizIn, matrizFim)){
     			System.out.println("Vamos em frente!! :D");
     		}
     		else{
@@ -289,5 +304,41 @@ public class Jogodos15 {
     			return;
     		}
     	}
+    	
+    	//escolher uma estrégia de busca
+    	System.out.print("Escolha uma estratégia de pesquisa\n" 
+    						+ "1 -> Pesquisa em Profundidade(DFS)\n" 
+    						+ "2 -> Pesquisa em Largura(BFS)\n"
+    						+ "3 -> Pesquisa Iterativa Limitada em Profundidade\n"
+    						+ "4 -> Pesquisa Greedy/Gulosa\n"
+    						+ "5 -> A*\n");
+    	
+    	//guarda o valor da escolha
+    	int escolhaPesquisa = stdin.nextInt();
+    	
+    	//implementa cada estratégia
+    	switch(escolhaPesquisa){
+    	
+    		case 1:
+    				//DFS
+    				break;
+    		case 2: 
+    				//BFS
+    				break;
+    		case 3: 
+    				//pesquisa iterativa limitada em profundidade
+    				break;
+    		case 4: 
+    				//pesquisa gulosa
+    				break;
+    		case 5:
+    				//A*
+    				break;
+    		default:
+    				//caso o numero de escolha seja diferente dos valores pedidos para a execução
+    				System.out.println("Nao intruduziu um valor correcto, por favor intruduza um numero entre 1 e 5");
+    				break;
+		}
+    	
     }
 }
