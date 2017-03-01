@@ -8,6 +8,7 @@ import java.util.*;
  *         
  */
 
+//classe respectiva aos nós
 class Node{
     public int matriz[][];
     public long depth; //nivel/altura da arvore
@@ -95,9 +96,14 @@ public class Jogodos15 {
 		return array;
     }
 
-    //verifica a solvabilidade impar 
-    //verifica se existe solucao entre a matriz incial e a matriz final
-    static boolean solvabilidadeimpar(Node in, Node out){
+    /**
+     * verifica se existe solucao entre o no inicial e o no final no caso da matriz ser impar
+     * 
+     * @param in no inicial
+     * @param out no do resultado final
+     * @return true se possivel caso contrario false
+     */
+    public static boolean solvabilidadeimpar(Node in, Node out){
     	int tam=n*n; //tamanho do vector
     	int vin[] = new int[tam]; //vector da matriz inicial
     	int vfim[]=new int[tam]; //vector da matriz final
@@ -126,33 +132,40 @@ public class Jogodos15 {
     	else
     		return false;
     	}
-
-    	//metodo auxilar que retorna um booleano para a solvabilidade par
-    	//verifica se a matriz que e passada se tem solucao
-    	public static boolean verifica(int array[], int lzero, int size){
-    		int count = 0;
-
-    		for(int i=0; i<size; i++){
-    			for(int j=i; j<size; j++){
-    				if(array[j] != 0 && array[i] > array[j]){
-    					count++;
-    				}
+    
+    /**
+     * verifica se o no que e passada tem solucao
+     * @param array transformado da matriz 
+     * @param lzero tamanho da matriz menos a posicao do zero (n-posi)
+     * @param size tamanho do vector
+     * @return 
+     */
+    public static boolean verifica(int array[], int lzero, int size){
+    	int count = 0;
+    	for(int i=0; i<size; i++){
+    		for(int j=i; j<size; j++){
+    			if(array[j] != 0 && array[i] > array[j]){
+    				count++;
     			}
     		}
-    		
-    		if((lzero%2)==0 && (count%2)!=0)
-    			return true;
-
-    		else if((lzero%2)!=0 && (count%2)==0)
-    			return true;
-
-    		else
-    			return false;
     	}
+   		
+    	if((lzero%2)==0 && (count%2)!=0)
+    		return true;
+    	else if((lzero%2)!=0 && (count%2)==0)
+    		return true;
+    	else
+    		return false;
+    }
     
-    //verifica a solvabilidade par
-    //verifica se existe solucao entre a matriz incial e a matriz final
-    public static boolean  solvabilidadepar(Node in, Node out){
+    /**
+     * verifica se existe solucao entre o no inicial e o no final no caso de a matriz ser par
+     * 
+     * @param in no inicial
+     * @param out no do resultado final
+     * @return true se possivel caso contrario false
+     */
+    public static boolean solvabilidadepar(Node in, Node out){
     	int tam=n*n; //tamanho do vector
     	int vin[] = new int[tam]; //vector da matriz inicial
     	int vfim[]=new int[tam]; //vector da matriz final
@@ -176,8 +189,12 @@ public class Jogodos15 {
     		return false;
     }
     
-    //copia a matriz incial para a matriz dos descendentes
-    //Para poder alterar a matriz sem mexer na matriz inicial
+    /**
+     * Copia a matriz inicial para a uma nova matriz
+     * para poder alterar sem mexer na matriz inicial
+     * @param d no da matriz que vai ser copiada
+     * @return copia do no
+     */
     public static Node copyNode(Node d){
 		Node copia = new Node(d);
 		return copia;
@@ -232,7 +249,6 @@ public class Jogodos15 {
 	}
 	
 	//calcula a distancia entre a posicao inicial e a posicao final 
-	//public static int calcManattanDistance(int matrizIn[][], int matrizFim[][]){
 	public static int calcManhattanDistance(Node in, Node out){
 		//coordenadas da posicao do valor
 		int coord[]=new int[2]; 
@@ -255,9 +271,7 @@ public class Jogodos15 {
 	
 	//procura o valor na matriz final e devolve as suas coordenadas
 	public static int[] findNum(int valor, int matriz[][]){
-		//vector das coordenadas no valor, com duas posicoes  
-		// 0 coordenada do i
-		// 1 coordenada do j
+		//vector das coordenadas no valor
 		int coordinates[] = new int[2];
 		
 		for (int i = 0; i < n; i++) {
@@ -347,10 +361,10 @@ public class Jogodos15 {
     	switch(Node.escolhaPesquisa){
     	
    			case 1:	//DFS
-   					Pesquisas.DFS(in, out);
+   					Pesquisas.generalSearchAlgorithm(in, out);
    					break;
    			case 2: //BFS
-   					Pesquisas.BFS(in, out);
+   					Pesquisas.generalSearchAlgorithm(in, out);
    					break;
    			case 3: //pesquisa iterativa limitada em profundidade
    				
