@@ -9,18 +9,22 @@ import java.util.*;
  */
 
 class Node{
-    int matriz[][];
-    long depth; //nivel/altura da arvore
-    int distance;
+    public int matriz[][];
+    public long depth; //nivel/altura da arvore
+    public long distance; //distancia manhattan
+	public boolean visited; //no visitado
+	public static int escolhaPesquisa;
+	
     
     public Node(int[][] matriz,long altura){
     	this.matriz = matriz;
     	this.depth = altura;
     	this.distance=0;
+    	this.visited=false;
     }
 	
 	public Node(Node other){
-			this(other.getMatriz(), other.getDepth());		
+		this(other.getMatriz(), other.getDepth());		
 	}
 	
 	public int[][] getMatriz(){
@@ -31,8 +35,29 @@ class Node{
 		return depth;
 	}
 	
-	public int getDistance(){
+	public long getDistance(){
 		return distance;
+	}
+	
+	public int compareTo(Node no){
+		if(escolhaPesquisa==4){ 
+			//escolha ser greedy
+			if(this.distance > no.distance)
+				return 1;
+			else if(this.distance < no.distance)
+				return -1;
+			else
+				return 0;
+		}
+		else{
+			//calcula a heuristica 
+			long heuristica=this.distance+this.depth;
+			if(heuristica>no.distance+no.depth)
+				return 1;
+			else if(heuristica < no.distance+no.depth)
+				return -1;
+		}
+		return 0;
 	}
 }
 
@@ -102,7 +127,8 @@ public class Jogodos15 {
     		return false;
     	}
 
-    	//verefica se ambas as configuracoes conseguem chegar a uma configuracao final no caso da solvabilidade par
+    	//metodo auxilar que retorna um booleano para a solvabilidade par
+    	//verifica se a matriz que e passada se tem solucao
     	public static boolean verifica(int array[], int lzero, int size){
     		int count = 0;
 
@@ -113,7 +139,7 @@ public class Jogodos15 {
     				}
     			}
     		}
-
+    		
     		if((lzero%2)==0 && (count%2)!=0)
     			return true;
 
@@ -158,7 +184,7 @@ public class Jogodos15 {
 	}
 
     //cria os descendentes
-	public static LinkedList<Node> makedescendants(Node in){
+	public static Node[] makedescendants(Node in){
 	
 		LinkedList<Node> listFilhos = new LinkedList<Node>();  
 		findzero(in);
@@ -186,7 +212,9 @@ public class Jogodos15 {
 			listFilhos.add(trocaPos(in, zeroi, zeroj+1));
 		}
 		
-		return listFilhos;
+		Node filhos[] = listFilhos.toArray(new Node[listFilhos.size()]); // convertido no array para poder ser navegado mais facilmente
+		
+		return filhos;
 	}
 	
 	//troca as posicoes e retorna a nova matriz
@@ -205,9 +233,10 @@ public class Jogodos15 {
 	
 	//calcula a distancia entre a posicao inicial e a posicao final 
 	//public static int calcManattanDistance(int matrizIn[][], int matrizFim[][]){
-	public static void calcManhattanDistance(Node in, Node out){
+	public static int calcManhattanDistance(Node in, Node out){
 		//coordenadas da posicao do valor
 		int coord[]=new int[2]; 
+		int distance=0;
 		
 		for(int i=0; i<n; i++){
 			for(int j=0; j<n; j++){
@@ -218,9 +247,10 @@ public class Jogodos15 {
 				int x1=coord[0];
 				int y1=coord[1];
 				
-				in.distance+= Math.abs(i-x1)+Math.abs(j-y1);
+				distance+= Math.abs(i-x1)+Math.abs(j-y1);
 			}
 		}
+		return distance;
 	}
 	
 	//procura o valor na matriz final e devolve as suas coordenadas
@@ -241,35 +271,6 @@ public class Jogodos15 {
 		return coordinates;
 	}
 	
-	//Algoritmo Geral de Busca
-	//Recomendacoes: devolver depth e tempo de execucao disto tudo
-	public static boolean GeneralSearchAlgorithm(Node in, Node out){
-		long startTime = System.nanoTime();
-		
-		//algoritmos de pesquisa
-		//criar stack/queue
-		int depthFound = -1;
-		Node target = in;
-		while(true){
-			if(Arrays.equals(target.matriz,out.matriz)){
-				depthFound=(int) target.depth;
-				break;
-			}
-			else{
-				//make nodes
-				//tirar 1o membro da stack/queue
-				//apply pixie dust
-				//meter na stack/queue na ordem certa
-			}
-			
-		}
-		
-		long endTime = System.nanoTime();
-		System.out.println("Demorou "+ (endTime - startTime)/1000000 + " ms");
-		System.out.println("Solucao encontrada na profundidade " + depthFound);
-		
-		return false;	
-	}
     
     public static void main(String args[]){
     	Scanner stdin = new Scanner(System.in);
@@ -340,31 +341,31 @@ public class Jogodos15 {
     						+ "5 -> A*\n");
     	
     	//guarda o valor da escolha
-    	int escolhaPesquisa = stdin.nextInt();
+    	Node.escolhaPesquisa = stdin.nextInt();
     	
     	//implementa cada estrategia
-    	switch(escolhaPesquisa){
+    	switch(Node.escolhaPesquisa){
     	
-    		case 1:
-    				//DFS
-    				break;
-    		case 2: 
-    				//BFS
-    				break;
-    		case 3: 
-    				//pesquisa iterativa limitada em profundidade
-    				break;
-    		case 4: 
-    				//pesquisa gulosa
-    				break;
-    		case 5:
-    				//A*
-    				break;
-    		default:
-    				//caso o numero de escolha seja diferente dos valores pedidos para a execucao
-    				System.out.println("Nao intruduziu um valor correcto, por favor intruduza um numero entre 1 e 5");
-    				break;
-		}
-    	
-    }
+   			case 1:	//DFS
+   					Pesquisas.DFS(in, out);
+   					break;
+   			case 2: //BFS
+   					Pesquisas.BFS(in, out);
+   					break;
+   			case 3: //pesquisa iterativa limitada em profundidade
+   				
+   					break;
+   			case 4: //pesquisa gulosa
+   					Pesquisas.Greedy(in, out);
+   					break;
+   			case 5://A*
+   					
+   					break;
+   			default:
+   				//caso o numero de escolha seja diferente dos valores pedidos para a execucao
+   				System.out.println("Nao intruduziu um valor correcto, por favor intruduza um numero entre 1 e 5");
+   			break;
+   		}
+   	
+   	}
 }
