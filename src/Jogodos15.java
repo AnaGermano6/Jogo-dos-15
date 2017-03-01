@@ -370,7 +370,7 @@ public class Jogodos15 {
    				
    					break;
    			case 4: //pesquisa gulosa
-   					Pesquisas.Greedy(in, out);
+   					Pesquisas.IDS(in, out);
    					break;
    			case 5://A*
    					
