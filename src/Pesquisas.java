@@ -85,13 +85,16 @@ public class Pesquisas extends Jogodos15{
  		long startTime = System.currentTimeMillis();
  		int level = 0;
  		
- 		while(foundsolution){
+ 		while(foundsolution==false){
  		    noList.removeAll(noList);
  		    visited.removeAll(visited);
  					
  		    noList.add(in); 						//adiciona configuracao inicial a lista
  		    while(!noList.isEmpty()){ 				//enquanto a lista nao esta vazia
  		    	Node removed = noList.removeFirst(); 	//removo primeiro elemento
+ 		    	
+ 		    	if(noList.size()%1000==0)
+ 	                System.out.println(noList.size()+" "+countnode+" "+removed.depth);
  		    	
  		    	if(!visited.contains(removed.matriz)){ 		// se esse elemento ainda nao tiver sido visitado
  		    		countnode++; 						// necessário para calcular nós utilizados (espaco)
@@ -111,10 +114,12 @@ public class Pesquisas extends Jogodos15{
  		    			if(!visited.contains(children[i].matriz) && children[i].depth <= level){ // se o filho ainda nao foi visitado e tiver a altura permitida, isto é <= que o nivel (level)
  		    				noList.addFirst(children[i]); 			//adicionar ao inicio da lista
  		    			}
- 		    			visited.poll(); //se o no falhou a condicao anterior entao eu quero remove-lo dos visitados para poder ser expandido noutro ramo
+ 		    			
  		    		}
  		    	}
  		    }
+ 		    visited.clear(); 
+			noList.clear();
  		    level++;
  		}
  	}
