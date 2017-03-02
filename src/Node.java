@@ -1,7 +1,7 @@
 import java.util.Arrays;
 
 //classe respectiva aos nós
-public class Node extends Jogodos15  implements Comparable<Node> {
+public class Node extends Jogodos15 implements Comparable<Node> {
 	
 	public int matriz[][];
 	public long depth; //nivel/altura da arvore

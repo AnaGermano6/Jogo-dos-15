@@ -125,51 +125,44 @@ public class Jogodos15 {
     		return false;
     }
     
-    //copia a matriz incial para a matriz dos descendentes
-    //Para poder alterar a matriz sem mexer na matriz inicial
-    public static Node copyNode(Node d){
-		Node copia = new Node(d);
-		return copia;
-	}
-
     //cria os descendentes
-	public static Node[] makedescendants(Node in){
+	public static Node makedescendants(Node in){
 	
-		LinkedList<Node> listFilhos = new LinkedList<Node>();  
 		findzero(in);
 		zeroi = posi; //linha onde esta o zero 
 		zeroj = posj; //coluna onde esta o zero
 	
 		//a posicao anterior onde esta o zero nao pode sair fora da matriz
 		if(!(zeroi-1<0)){
-			listFilhos.add(trocaPos(in, zeroi-1, zeroj));
+			Node filho = new Node(trocaPos(in, zeroi-1, zeroj));
+			return filho;
 		}
 		
 		//a posicao a seguir tem de ser menor que o tamanho da matriz para poder haver troca
 		if(!(zeroi+1>=n)){
-			listFilhos.add(trocaPos(in, zeroi+1, zeroj));
+			Node filho = new Node(trocaPos(in, zeroi+1, zeroj));
+			return filho;
 		}
 		
 	
 		//a posicao anterior onde esta o zero nao pode sair fora da matriz 	
 		if(!(zeroj-1<0)){
-			listFilhos.add(trocaPos(in, zeroi, zeroj-1));
+			Node filho = new Node(trocaPos(in, zeroi, zeroj-1));
+			return filho;
 		}
 	
 		//a posicao a seguir tem de ser menor que o tamanho da matriz para poder haver troca
 		if(!(zeroj+1>=n)){
-			listFilhos.add(trocaPos(in, zeroi, zeroj+1));
+			Node filho = new Node(trocaPos(in, zeroi, zeroj+1));
+			return filho;
 		}
-		
-		Node filhos[] = listFilhos.toArray(new Node[listFilhos.size()]); // convertido no array para poder ser navegado mais facilmente
-		
-		return filhos;
+		return in;
 	}
 	
 	//troca as posicoes e retorna a nova matriz
 	public static Node trocaPos(Node in, int i, int j){
 		Node copyM = copyNode(in);
-        //~ System.out.println(i +" "+ j);
+  
         //trocar valores na Matriz copia
 		copyM.matriz[zeroi][zeroj] = copyM.matriz[i][j];
 		copyM.matriz[i][j]= 0;
@@ -179,6 +172,13 @@ public class Jogodos15 {
         copyM.parent=in;
 
 		return copyM;
+	}
+	
+	//copia a matriz incial para a matriz dos descendentes
+    //Para poder alterar a matriz sem mexer na matriz inicial
+    public static Node copyNode(Node d){
+		Node copia = new Node(d);
+		return copia;
 	}
 	
 	//calcula a distancia entre a posicao inicial e a posicao final 
@@ -205,9 +205,7 @@ public class Jogodos15 {
 	
 	//procura o valor na matriz final e devolve as suas coordenadas
 	public static int[] findNum(int valor, int matriz[][]){
-		//vector das coordenadas no valor, com duas posicoes  
-		// 0 coordenada do i
-		// 1 coordenada do j
+		//vector das coordenadas no valor
 		int coordinates[] = new int[2];
 		
 		for (int i = 0; i < n; i++) {
@@ -236,7 +234,9 @@ public class Jogodos15 {
     	int matrizIn [][]= new int[n][n];	
     	//matriz final
     	int matrizFim [][]= new int[n][n];
-	
+    	
+    	
+    	System.out.println(" ");
     	System.out.println("Insira o tabuleiro com as posicoes iniciais");
     	//le a matriz inicial	
     	for(int i=0; i<n; i++){
@@ -246,7 +246,7 @@ public class Jogodos15 {
     	}
 	
  
-    	
+    	System.out.println(" ");
     	System.out.println("Insira o tabuleiro com as posicoes finais");
     	//le a matriz final
     	for(int i=0; i<n; i++){
@@ -265,9 +265,11 @@ public class Jogodos15 {
     	if((n%2) == 0){
     		if(solvabilidadepar(in, out)){
     			System.out.println("Vamos em frente!! :D");
+    			System.out.println(" ");
     		}
     		else{
     			System.out.println("Nao e possivel resolver :(");
+    			System.out.println(" ");
     			return;
     		}
     	}
@@ -275,9 +277,11 @@ public class Jogodos15 {
     	else{
     		if(solvabilidadeimpar(in, out)){
     			System.out.println("Vamos em frente!! :D");
+    			System.out.println(" ");
     		}
     		else{
     			System.out.println("Nao e possivel resolver :(");
+    			System.out.println(" ");
     			return;
     		}
     	}
