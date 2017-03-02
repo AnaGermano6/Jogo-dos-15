@@ -283,7 +283,7 @@ public class Jogodos15 {
     	}
     	
     	//escolher uma estregia de busca
-    	System.out.print("escolha uma estrategia de pesquisa\n" 
+    	System.out.print("Escolha uma estrategia de pesquisa:\n" 
     						+ "1 -> Pesquisa em Profundidade(DFS)\n" 
     						+ "2 -> Pesquisa em Largura(BFS)\n"
     						+ "3 -> Pesquisa Iterativa Limitada em Profundidade\n"
