@@ -28,9 +28,6 @@ public class Node extends Jogodos15 implements Comparable<Node> {
 		this.escolhaPesquisa=pesq;
 	}
 
-
-
-
 	public Node(Node other){
 		this.matriz=other.getMatriz();
 		this.depth=other.getDepth();
@@ -105,39 +102,34 @@ public class Node extends Jogodos15 implements Comparable<Node> {
 		//a posicao anterior onde esta o zero nao pode sair fora da matriz
 		if(!(zeroi-1<0)){
 			tran=trocaPos(in, zeroi-1, zeroj);
-				if(/*!Jogodos15.visited.containsValue(tran.matriz) &&*/ !(in.matriz.equals(tran.matriz))){
+				if(!(in.matriz.equals(tran.matriz))){
 					Node filho = new Node(tran);	
 					noList.add(filho);	
-					//System.out.println("esquerda");
 				}
 		}
 		//a posicao a seguir tem de ser menor que o tamanho da matriz para poder haver troca
 		if(!(zeroi+1>=n)){
 			tran=trocaPos(in, zeroi+1, zeroj);
-			if(/*!Jogodos15.visited.containsValue(tran.matriz) &&*/ !(in.matriz.equals(tran.matriz))){
+			if(!(in.matriz.equals(tran.matriz))){
 				Node filho = new Node(tran);	
-				noList.add(filho);	
-			//	System.out.println("dir");
-				
+				noList.add(filho);					
 			}
 		}
 		//a posicao anterior onde esta o zero nao pode sair fora da matriz 	
 		if(!(zeroj-1<0)){
 			tran=trocaPos(in, zeroi, zeroj-1);
-			if(/*!Jogodos15.visited.containsValue(tran.matriz) &&*/ !(in.matriz.equals(tran.matriz))){
+			if(!(in.matriz.equals(tran.matriz))){
 				Node filho = new Node(tran);	
 				noList.add(filho);	
-				//System.out.println("up");
 			}
 		}
 
 		//a posicao a seguir tem de ser menor que o tamanho da matriz para poder haver troca
 		if(!(zeroj+1>=n)){
 			tran=trocaPos(in, zeroi, zeroj+1);
-			if(/*!Jogodos15.visited.containsValue(tran.matriz) &&*/ !(in.matriz.equals(tran.matriz))){
+			if(!(in.matriz.equals(tran.matriz))){
 				Node filho = new Node(tran);	
 				noList.add(filho);	
-				//System.out.println("baixo");
 			}
 		}
 		return noList;
@@ -161,25 +153,7 @@ public class Node extends Jogodos15 implements Comparable<Node> {
 
 		Node copyM = new Node(matriz, in.depth+1);
 		//adiciona mais 1 nivel ao no pai
-		//copyM.depth+=1;
 		copyM.parent=in;
-
-		/*
-		System.out.println("\n \n");
-		for(int asd= 0; asd<4; asd++){
-			for(int asr=0; asr < 4; asr++){
-				System.out.print(matriz[asd][asr]+" | " );
-			}
-			System.out.println();
-		}
-		System.out.println();
-		for(int asd= 0; asd<4; asd++){
-			for(int asr=0; asr < 4; asr++){
-				System.out.print(in.matriz[asd][asr]+ " | " );
-			}
-			System.out.println();
-		}
-		System.out.println("\n \n");*/
 		
 		return copyM;
 	}

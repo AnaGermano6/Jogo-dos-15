@@ -12,8 +12,8 @@ public class Pesquisas extends Jogodos15{
 	// last hurrah
 	public static boolean comp(int a[][], int b[][]){
 		
-		for(int i = 0 ; i< 4 ; i++ )
-			for(int j = 0 ; j<4 ; j++ )
+		for(int i = 0 ; i< n ; i++ )
+			for(int j = 0 ; j<n ; j++ )
 				if(a[i][j]!=b[i][j])
 					return false;
 		return true;
@@ -128,8 +128,6 @@ public class Pesquisas extends Jogodos15{
  		int level = 0; 
 
  		while(foundsolution==false){
- 			//noList.removeAll(noList);
- 		    //visited.remove(visited);
 
  		  	//adiciona configuracao inicial a lista
  			noList.add(in); 									
@@ -198,7 +196,7 @@ public class Pesquisas extends Jogodos15{
 				visited.put(countnodevisit,java.util.Arrays.deepHashCode(removed.matriz)); 					
 
 				//se o no removido for solucao
-				if(comp(removed.matriz, fim.matriz)){ 		
+				if(comp(removed.matriz, fim.matriz)){ 			
 					foundsolution = true; 					
 					System.out.println("Solucao encontrada no nível: " + removed.depth + ", quantidade de nos criados: " + countnos);
 
@@ -214,8 +212,9 @@ public class Pesquisas extends Jogodos15{
 				LinkedList<Node> children  = Node.makedescendants(removed);
 				countnos+=children.size();
 				
-				while(!children.isEmpty()){
-					Node n = children.removeFirst();
+				//while(!children.isEmpty()){
+				for(int i=0; i<children.size(); i++){
+					Node n = children.get(i);
 					// para cada filho, meter-lhe a distancia manhattan
                     n.distance = Node.calcManhattanDistance(n, fim); 
                 }
@@ -230,10 +229,10 @@ public class Pesquisas extends Jogodos15{
 		}
 	}
 	
-	/*
+	
 
 	//pesquisa A*
-	public static void aStar(Node in, Node out){	
+	public static void aStar(Node in, Node fim){	
 
 		long startTime = System.currentTimeMillis();
 
@@ -242,11 +241,14 @@ public class Pesquisas extends Jogodos15{
 		while(!noList.isEmpty()){ 							
 			Node removed = noList.removeFirst();			
 
-			if(!visited.contains(removed.matriz)){ 				
-				countnodevisit++; 								
-				visited.add(removed); 					
+			// se esse elemento ainda nao tiver sido visitado
+			if(!visited.containsValue(java.util.Arrays.deepHashCode(removed.matriz))){ 			
+				countnodevisit++;
+				//adiciono a lista de visitados
+				visited.put(countnodevisit,java.util.Arrays.deepHashCode(removed.matriz)); 							
 
-				if(Arrays.deepEquals(removed.matriz, out.matriz)){ 					
+				//se o no removido for solucao
+				if(comp(removed.matriz, fim.matriz)){ 							
 					foundsolution = true; 					
 					System.out.println("Solucao encontrada no nível: " + removed.depth + ", quantidade de nos criados: " + countnodevisit);
 
@@ -257,27 +259,22 @@ public class Pesquisas extends Jogodos15{
 				}
 
 				//funcao para criar os filhos
-				Node children = makedescendants(removed); 
-				countnos++;
-				//for(int i = 0; i<children.length; i++){	
-				while(!noList.isEmpty()){
+				LinkedList<Node> children  = Node.makedescendants(removed);
+				countnos+=children.size();
+				
+				for(int i = 0; i<children.size(); i++){	
+					Node n = children.get(i);
 					// para cada filho, meter-lhe a distancia manhattan
-                    children.distance = calcManhattanDistance(children, out);
+                    n.distance = Node.calcManhattanDistance(n, fim); 
 				}
 
-               // Arrays.sort(children);
-                //for(int i = 0; i<children.length; i++){
-				while(!noList.isEmpty()){
-                	// se o filho ainda nao foi visitado
-                    if(!visited.contains(children.matriz)){ 
-                    	//adicionar ao inicio da lista
-                        noList.addFirst(children); 		
+				while(!children.isEmpty()){
+					Node n = children.removeFirst();
+                    if(!visited.containsValue(java.util.Arrays.deepHashCode(n.matriz))){ 	
+                        noList.addFirst(n); 	
                     }
                 }
-
-                if(noList.size()%1000==0)
-                    System.out.println(noList.size()+" "+countnodevisit+" "+removed.depth);
 			}
 		}
-	}*/
+	}
 }		

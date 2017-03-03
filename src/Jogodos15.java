@@ -217,7 +217,7 @@ public class Jogodos15 {
    					Pesquisas.Greedy(in, out);
    					break;
    			case 5: //A*
-   					//Pesquisas.aStar(in, out);
+   					Pesquisas.aStar(in, out);
    					break;
    			default:
    				//caso o numero de escolha seja diferente dos valores pedidos para a execucao
