@@ -173,11 +173,9 @@ public class Jogodos15 {
     	if((n%2) == 0){
     		if(solvabilidadepar(in, out)){
     			System.out.println("Vamos em frente!! :D");
-    			System.out.println(" ");
     		}
     		else{
     			System.out.println("Nao e possivel resolver :(");
-    			System.out.println(" ");
     			return;
     		}
     	}
@@ -185,11 +183,9 @@ public class Jogodos15 {
     	else{
     		if(solvabilidadeimpar(in, out)){
     			System.out.println("Vamos em frente!! :D");
-    			System.out.println(" ");
     		}
     		else{
     			System.out.println("Nao e possivel resolver :(");
-    			System.out.println(" ");
     			return;
     		}
     	}
@@ -215,10 +211,10 @@ public class Jogodos15 {
    					Pesquisas.BFS(in, out);
    					break;
    			case 3: //pesquisa iterativa limitada em profundidade
-   					//Pesquisas.IDS(in, out);
+   					Pesquisas.IDS(in, out);
    					break;
    			case 4: //pesquisa gulosa
-   					//Pesquisas.Greedy(in, out);
+   					Pesquisas.Greedy(in, out);
    					break;
    			case 5: //A*
    					//Pesquisas.aStar(in, out);
