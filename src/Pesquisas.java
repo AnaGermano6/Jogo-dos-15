@@ -42,10 +42,12 @@ public class Pesquisas extends Jogodos15{
 					foundsolution = true; 					
 					System.out.println("Solucao encontrada no nível: " + removed.depth + ", quantidade de nos criados: " + countnos);
 
+
 					long stopTime = System.currentTimeMillis();
 					//tempo de execução
-					long elapsedTime = stopTime - startTime; 
-					System.out.println("Tempo que demorou: " + elapsedTime + " ms");
+					long elapsedTime = stopTime - startTime;
+					double time = elapsedTime/1000;
+					System.out.println("Tempo que demorou: " + elapsedTime + " ms, convertido em segundos " + time);
 					return;
 				}
 
@@ -92,11 +94,12 @@ public class Pesquisas extends Jogodos15{
 					foundsolution = true; 					
 					System.out.println("Solucao encontrada no nível: " + removed.depth + ", quantidade de nos criados: " + countnos);
 
+
 					long stopTime = System.currentTimeMillis();
 					//tempo de execução
 					long elapsedTime = stopTime - startTime;
 					double time = elapsedTime/1000;
-					System.out.println("Tempo que demorou: " + time + " s");
+					System.out.println("Tempo que demorou: " + elapsedTime + " ms, convertido em segundos " + time);
 					return;
 				}
 
@@ -187,18 +190,78 @@ public class Pesquisas extends Jogodos15{
 		noList.add(in); 									
 
 		while(!noList.isEmpty()){ 							
-			Node removed = noList.removeFirst();
-			
-			// se esse elemento ainda nao tiver sido visitado
-			if(!visited.containsValue(java.util.Arrays.deepHashCode(removed.matriz))){ 			
-				countnodevisit++;
-				//adiciono a lista de visitados
-				visited.put(countnodevisit,java.util.Arrays.deepHashCode(removed.matriz)); 					
+		    Node removed = noList.removeFirst();
+	            
+		    // se esse elemento ainda nao tiver sido visitado
+		    if(!visited.containsValue(java.util.Arrays.deepHashCode(removed.matriz))){
+	            
+			countnodevisit++;
+			//adiciono a lista de visitados
+			visited.put(countnodevisit,java.util.Arrays.deepHashCode(removed.matriz)); 					
 
-				//se o no removido for solucao
-				if(comp(removed.matriz, fim.matriz)){ 			
+			//se o no removido for solucao
+			if(comp(removed.matriz, fim.matriz)){ 
+			    System.out.println("IF 2"); 					
+			    foundsolution = true; 					
+			    System.out.println("Solucao encontrada no nível: " + removed.depth + ", quantidade de nos criados: " + countnos);
+
+			    long stopTime = System.currentTimeMillis();
+			    //tempo de execução
+			    long elapsedTime = stopTime - startTime;
+			    double time = elapsedTime/1000;
+			    System.out.println("Tempo que demorou: " + elapsedTime + " ms, convertido em segundos " + time);
+			    return;
+			}
+
+			//funcao para criar os filhos
+			LinkedList<Node> children  = Node.makedescendants(removed);
+			countnos+=children.size();
+	                		
+            Node ch[] = children.toArray(new Node[children.size()]);
+            for(int i=0; i<ch.length;i++){
+                ch[i].distance = Node.calcManhattanDistance(ch[i], fim);
+            }
+            Arrays.sort(ch);
+            children = new LinkedList(Arrays.asList(ch));
+            
+            
+            while(!children.isEmpty()){
+            	Node n = children.removeFirst();
+                if(!visited.containsValue(java.util.Arrays.deepHashCode(n.matriz))){ 	
+                    noList.addFirst(n);
+		
+                    while(!children.isEmpty()){
+                    	Node m = children.removeFirst();
+                    	if(!visited.containsValue(java.util.Arrays.deepHashCode(m.matriz))){
+                    		noList.addLast(m);
+                    	}
+                    }			
+			    }
+            }
+         }
+	 }
+	 System.out.println("nuffin'");
+ }
+	
+
+	//pesquisa A*
+	public static void aStar(Node in, Node fim){	
+
+		long startTime = System.currentTimeMillis();
+
+		noList.add(in); 									
+
+		while(!noList.isEmpty()){ 							
+			Node removed = noList.removeFirst();	
+            	
+			if(!visited.containsValue(java.util.Arrays.deepHashCode(removed.matriz))){
+				countnodevisit++; 								
+				visited.put(countnodevisit,java.util.Arrays.deepHashCode(removed.matriz)); 			
+
+				if(comp(removed.matriz, fim.matriz)){ 				
 					foundsolution = true; 					
-					System.out.println("Solucao encontrada no nível: " + removed.depth + ", quantidade de nos criados: " + countnos);
+					System.out.println("Solucao encontrada no nível: " + removed.depth + ", quantidade de nos criados: " + countnodevisit);
+
 
 					long stopTime = System.currentTimeMillis();
 					//tempo de execução
@@ -211,70 +274,31 @@ public class Pesquisas extends Jogodos15{
 				//funcao para criar os filhos
 				LinkedList<Node> children  = Node.makedescendants(removed);
 				countnos+=children.size();
-				
-				//while(!children.isEmpty()){
-				for(int i=0; i<children.size(); i++){
-					Node n = children.get(i);
-					// para cada filho, meter-lhe a distancia manhattan
-                    n.distance = Node.calcManhattanDistance(n, fim); 
-                }
 
+                //variavel temporaria para adicionar manhattan distance+depth aos filhos
+                Node ch[] = children.toArray(new Node[children.size()]);    
+                
+                for(int i=0; i<ch.length;i++){
+                    ch[i].distance = Node.calcManhattanDistance(ch[i], fim);
+                }
+                //recuperar o tipo da variavel
+                children = new LinkedList(Arrays.asList(ch));
+
+                //for(int i = 0; i<children.length; i++){
 				while(!children.isEmpty()){
 					Node n = children.removeFirst();
                     if(!visited.containsValue(java.util.Arrays.deepHashCode(n.matriz))){ 	
-                        noList.addFirst(n); 	
+                        noList.addFirst(n); 
+                        			
                     }
                 }
+                //variavel temporaria para ordenar os candidatos à execução
+                Node noL[] = noList.toArray(new Node[noList.size()]);
+                Arrays.sort(noL);
+                noList = new LinkedList(Arrays.asList(noL));
+
 			}
 		}
 	}
-	
-	
-
-	//pesquisa A*
-	public static void aStar(Node in, Node fim){	
-
-		long startTime = System.currentTimeMillis();
-
-		noList.add(in); 									
-
-		while(!noList.isEmpty()){ 							
-			Node removed = noList.removeFirst();			
-
-			// se esse elemento ainda nao tiver sido visitado
-			if(!visited.containsValue(java.util.Arrays.deepHashCode(removed.matriz))){ 			
-				countnodevisit++;
-				//adiciono a lista de visitados
-				visited.put(countnodevisit,java.util.Arrays.deepHashCode(removed.matriz)); 							
-
-				//se o no removido for solucao
-				if(comp(removed.matriz, fim.matriz)){ 							
-					foundsolution = true; 					
-					System.out.println("Solucao encontrada no nível: " + removed.depth + ", quantidade de nos criados: " + countnodevisit);
-
-					long stopTime = System.currentTimeMillis();
-			 	    long elapsedTime = stopTime - startTime;
-			 	    System.out.println("Tempo que demorou: " + elapsedTime);
-					return;
-				}
-
-				//funcao para criar os filhos
-				LinkedList<Node> children  = Node.makedescendants(removed);
-				countnos+=children.size();
-				
-				for(int i = 0; i<children.size(); i++){	
-					Node n = children.get(i);
-					// para cada filho, meter-lhe a distancia manhattan
-                    n.distance = Node.calcManhattanDistance(n, fim); 
-				}
-
-				while(!children.isEmpty()){
-					Node n = children.removeFirst();
-                    if(!visited.containsValue(java.util.Arrays.deepHashCode(n.matriz))){ 	
-                        noList.addFirst(n); 	
-                    }
-                }
-			}
-		}
-	}
-}		
+}
+		
