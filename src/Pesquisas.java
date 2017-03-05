@@ -46,8 +46,7 @@ public class Pesquisas extends Jogodos15{
 					long stopTime = System.currentTimeMillis();
 					//tempo de execução
 					long elapsedTime = stopTime - startTime;
-					double time = elapsedTime/1000;
-					System.out.println("Tempo que demorou: " + elapsedTime + " ms, convertido em segundos " + time);
+					System.out.println("Tempo que demorou: " + elapsedTime + " ms");
 					return;
 				}
 
@@ -90,7 +89,6 @@ public class Pesquisas extends Jogodos15{
 
 				//se o no removido for solucao
 				if(comp(removed.matriz, fim.matriz)){ 	
-				//if(removed.equals(fim)){	
 					foundsolution = true; 					
 					System.out.println("Solucao encontrada no nível: " + removed.depth + ", quantidade de nos criados: " + countnos);
 
@@ -98,8 +96,7 @@ public class Pesquisas extends Jogodos15{
 					long stopTime = System.currentTimeMillis();
 					//tempo de execução
 					long elapsedTime = stopTime - startTime;
-					double time = elapsedTime/1000;
-					System.out.println("Tempo que demorou: " + elapsedTime + " ms, convertido em segundos " + time);
+					System.out.println("Tempo que demorou: " + elapsedTime + " ms");
 					return;
 				}
 
@@ -112,7 +109,7 @@ public class Pesquisas extends Jogodos15{
 					Node n = children.removeFirst();
 					if(!visited.containsValue(java.util.Arrays.deepHashCode(n.matriz))){
 						//adicionar ao inicio da lista
-							noList.addLast(n); 			
+						noList.addLast(n); 			
 					}
 				}
 			}
@@ -152,8 +149,7 @@ public class Pesquisas extends Jogodos15{
  						long stopTime = System.currentTimeMillis();
  						//tempo de execução
  						long elapsedTime = stopTime - startTime;
- 						double time = elapsedTime/1000;
- 						System.out.println("Tempo que demorou: " + elapsedTime + " ms, convertido em segundos " + time);
+ 						System.out.println("Tempo que demorou: " + elapsedTime + " ms");
  						return;
  					}
 
@@ -191,25 +187,22 @@ public class Pesquisas extends Jogodos15{
 
 		while(!noList.isEmpty()){ 							
 		    Node removed = noList.removeFirst();
-	            
+				
 		    // se esse elemento ainda nao tiver sido visitado
-		    if(!visited.containsValue(java.util.Arrays.deepHashCode(removed.matriz))){
-	            
-			countnodevisit++;
-			//adiciono a lista de visitados
-			visited.put(countnodevisit,java.util.Arrays.deepHashCode(removed.matriz)); 					
+		    if(!visited.containsValue(java.util.Arrays.deepHashCode(removed.matriz))){  
+		    	countnodevisit++;
+		    	//adiciono a lista de visitados
+		    	visited.put(countnodevisit,java.util.Arrays.deepHashCode(removed.matriz)); 					
 
 			//se o no removido for solucao
-			if(comp(removed.matriz, fim.matriz)){ 
-			    System.out.println("IF 2"); 					
+			if(comp(removed.matriz, fim.matriz)){ 					
 			    foundsolution = true; 					
 			    System.out.println("Solucao encontrada no nível: " + removed.depth + ", quantidade de nos criados: " + countnos);
 
 			    long stopTime = System.currentTimeMillis();
 			    //tempo de execução
 			    long elapsedTime = stopTime - startTime;
-			    double time = elapsedTime/1000;
-			    System.out.println("Tempo que demorou: " + elapsedTime + " ms, convertido em segundos " + time);
+			    System.out.println("Tempo que demorou: " + elapsedTime + " ms");
 			    return;
 			}
 
@@ -224,26 +217,21 @@ public class Pesquisas extends Jogodos15{
             Arrays.sort(ch);
             children = new LinkedList(Arrays.asList(ch));
             
-            
-            while(!children.isEmpty()){
-            	Node n = children.removeFirst();
-                if(!visited.containsValue(java.util.Arrays.deepHashCode(n.matriz))){ 	
-                    noList.addFirst(n);
-		
-                    while(!children.isEmpty()){
-                    	Node m = children.removeFirst();
-                    	if(!visited.containsValue(java.util.Arrays.deepHashCode(m.matriz))){
-                    		noList.addLast(m);
-                    	}
-                    }			
-			    }
-            }
-         }
-	 }
-	 System.out.println("nuffin'");
- }
-	
+	                
+			while(!children.isEmpty()){
+			    Node n = children.removeFirst();
+	            noList.addFirst(n);
+	            
+				while(!children.isEmpty()){
+				    Node m = children.removeFirst();
+					noList.addLast(m);	
+				}
+			}
+		}
+	}
+}
 
+	
 	//pesquisa A*
 	public static void aStar(Node in, Node fim){	
 
@@ -266,8 +254,7 @@ public class Pesquisas extends Jogodos15{
 					long stopTime = System.currentTimeMillis();
 					//tempo de execução
 					long elapsedTime = stopTime - startTime;
-					double time = elapsedTime/1000;
-					System.out.println("Tempo que demorou: " + elapsedTime + " ms, convertido em segundos " + time);
+					System.out.println("Tempo que demorou: " + elapsedTime + " ms");
 					return;
 				}
 
@@ -284,7 +271,6 @@ public class Pesquisas extends Jogodos15{
                 //recuperar o tipo da variavel
                 children = new LinkedList(Arrays.asList(ch));
 
-                //for(int i = 0; i<children.length; i++){
 				while(!children.isEmpty()){
 					Node n = children.removeFirst();
                     if(!visited.containsValue(java.util.Arrays.deepHashCode(n.matriz))){ 	
@@ -301,4 +287,3 @@ public class Pesquisas extends Jogodos15{
 		}
 	}
 }
-		
