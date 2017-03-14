@@ -11,8 +11,6 @@ import java.util.*;
 //class principal
 public class Jogodos15 {
 
-//	public static LinkedList<int[][]> visited = new LinkedList<int[][]>();
-	//public static HashMap<Integer,int[][]> visited = new HashMap<Integer,int[][]>();
 	public static int posi = 0; 
     public static int posj = 0;
     public static int zeroi, zeroj;
@@ -110,7 +108,6 @@ public class Jogodos15 {
     	vin=createarray(in);
     	vfim=createarray(out);
 
-        //ATENÇÃO AQUI
     	findzero(in);
     	int localin = n-posi;
 
@@ -156,6 +153,7 @@ public class Jogodos15 {
  
     	System.out.println(" ");
     	System.out.println("Insira o tabuleiro com as posicoes finais");
+    	
     	//le a matriz final
     	for(int i=0; i<n; i++){
     		for(int j=0; j<n; j++){

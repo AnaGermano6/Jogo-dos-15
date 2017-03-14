@@ -187,49 +187,47 @@ public class Pesquisas extends Jogodos15{
 
 		while(!noList.isEmpty()){ 							
 		    Node removed = noList.removeFirst();
-				
+					
 		    // se esse elemento ainda nao tiver sido visitado
 		    if(!visited.containsValue(java.util.Arrays.deepHashCode(removed.matriz))){  
 		    	countnodevisit++;
 		    	//adiciono a lista de visitados
 		    	visited.put(countnodevisit,java.util.Arrays.deepHashCode(removed.matriz)); 					
 
-			//se o no removido for solucao
-			if(comp(removed.matriz, fim.matriz)){ 					
-			    foundsolution = true; 					
-			    System.out.println("Solucao encontrada no nível: " + removed.depth + ", quantidade de nos criados: " + countnos);
+		    	//se o no removido for solucao
+		    	if(comp(removed.matriz, fim.matriz)){ 					
+			    	foundsolution = true; 					
+			    	System.out.println("Solucao encontrada no nível: " + removed.depth + ", quantidade de nos criados: " + countnos);
 
-			    long stopTime = System.currentTimeMillis();
-			    //tempo de execução
-			    long elapsedTime = stopTime - startTime;
-			    System.out.println("Tempo que demorou: " + elapsedTime + " ms");
-			    return;
-			}
+			    	long stopTime = System.currentTimeMillis();
+			    	//tempo de execução
+			    	long elapsedTime = stopTime - startTime;
+			    	System.out.println("Tempo que demorou: " + elapsedTime + " ms");
+			    	return;
+				}	
 
-			//funcao para criar os filhos
-			LinkedList<Node> children  = Node.makedescendants(removed);
-			countnos+=children.size();
-	                		
-            Node ch[] = children.toArray(new Node[children.size()]);
-            for(int i=0; i<ch.length;i++){
-                ch[i].distance = Node.calcManhattanDistance(ch[i], fim);
-            }
-            Arrays.sort(ch);
-            children = new LinkedList(Arrays.asList(ch));
-            
-	                
-			while(!children.isEmpty()){
-			    Node n = children.removeFirst();
-	            noList.addFirst(n);
-	            
-				while(!children.isEmpty()){
-				    Node m = children.removeFirst();
-					noList.addLast(m);	
+				//funcao para criar os filhos
+				LinkedList<Node> children  = Node.makedescendants(removed);
+				countnos+=children.size();
+		                		
+				Node ch[] = children.toArray(new Node[children.size()]);
+				for(int i=0; i<ch.length;i++){
+			    	ch[i].distance = Node.calcManhattanDistance(ch[i], fim);
 				}
-			}
+	            
+				children = new LinkedList(Arrays.asList(ch));
+	            
+		                
+				while(!children.isEmpty()){
+			    	Node n = children.removeFirst();
+		            	noList.addFirst(n);
+				}
+		    }
+		    Node noL[] = noList.toArray(new Node[noList.size()]);
+			Arrays.sort(noL);
+			noList = new LinkedList(Arrays.asList(noL));
 		}
 	}
-}
 
 	
 	//pesquisa A*
